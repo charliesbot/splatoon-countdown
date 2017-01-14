@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Whack A Mole!</title>
+  <link
+    href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700'
+    rel='stylesheet'
+    type='text/css'
+  >
+</head>
+
+<style>
+  @font-face {
+    font-family: 'Splatoon';
+    src: url('font/splatoon.otf');
+  }
+  
+  html,
+  body {
+    height: 100%;
+    width: 100%;
+    background-color: orange;
+  }
+  
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Splatoon;
+  }
+  
+  .circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    font-size: 125px;
+    transition: transform 0.3s ease;
+    box-shadow: 0px 0px 14px 6px rgba(0, 0, 0, 0.5)
+  }
+  
+  .circle.big {
+    transform: scale(1.2);
+  }
+  
+  .main-counter {}
+  
+  .secondary-counter {
+    position: absolute;
+    /*transition: all ease 0.6s;*/
+  }
+  
+  .secondary-counter.big {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+
+</style>
+
+<body>
+  <div class="circle">
+    <div class="main-counter">
+
+    </div>
+    <div class="secondary-counter"></div>
+  </div>
+
+  <script>
+    const mainCounter = document.querySelector('.main-counter')
+    const secondaryCounter = document.querySelector('.secondary-counter')
+    const circle = document.querySelector('.circle')
+    let interval;
+
+    function countDown(number) {
+      mainCounter.textContent = number
+      secondaryCounter.textContent = number
+      interval = setInterval(() => {
+        number--
+        if (number < 0)
+          return clearInterval(interval)
+        circle.classList.add('big')
+        secondaryCounter.classList.add('big')
+        secondaryCounter.style.transition = 'all ease 0.9s'
+        mainCounter.textContent = number
+        secondaryCounter.textContent = number
+      }, 1000)
+    }
+
+    function onTransitionEnd(e) {
+      if (e.propertyName !== 'transform') return;
+      this.classList.remove('big')
+      this.style.transition = 'none'
+    }
+
+    circle.addEventListener('transitionend', function(e) {
+      if (e.propertyName !== 'transform') return;
+      this.classList.remove('big')
+    })
+    secondaryCounter.addEventListener('transitionend', onTransitionEnd)
+
+    countDown(200)
+
+  </script>
+</body>
+
+</html>
